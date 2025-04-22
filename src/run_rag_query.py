@@ -10,19 +10,28 @@ from src.paths import LANCEDB_URI
 
 
 @observe
-def build_hyde_query(client: OpenAI, query: str) -> str:
-    prompt = f"""
-    Consider the following query, related to a movie: {query}
-    Create a one-sentence summary for a movie relevant to the query.
-    You do not need to describe an existing movie, feel free to invent, but stay relevant to the query.
-    """
+def generate_with_openai(client: OpenAI, prompt: str) -> str:
+    langfuse_context.update_current_observation(input={"prompt": prompt})
     response = client.chat.completions.create(
         model="gpt-4.1",
         messages=[
             {"role": "user", "content": prompt},
         ],
+        seed=42,
+        temperature=0,
     )
     return response.choices[0].message.content
+
+
+@observe
+def build_hyde_query(client: OpenAI, query: str) -> str:
+    langfuse_context.update_current_observation(input={"query": query})
+    prompt = f"""
+Consider the following query, related to a movie: {query}
+Create a one-sentence summary for a movie relevant to the query.
+You do not need to describe an existing movie, feel free to invent, but stay relevant to the query.
+    """
+    return generate_with_openai(client, prompt)
 
 
 def run_semantic_query(
@@ -49,38 +58,34 @@ def run_reranking(
     movies: list[Movie],
     query: str,
 ) -> str:
+    langfuse_context.update_current_observation(
+        input={"query": query, "movies": movies}
+    )
     formated_movies = format_movies(movies)
     prompt = f"""
-    Consider the following query, related to a movie: {query}
-    The following movies were proposed as relevant to the query:
-    {formated_movies}
-    Please re-rank the movies based on their relevance to the query, removing any duplicate and any irrelevant item.
-    Only return the updated list, with all the information for each movie.
+Consider the following query, related to a movie: {query}
+The following movies were proposed as relevant to the query:
+{formated_movies}
+Please re-rank the movies based on their relevance to the query, removing any duplicate and any irrelevant item.
+Only return the updated list, with all the information for each movie.
     """
-    response = client.chat.completions.create(
-        model="gpt-4.1",
-        messages=[
-            {"role": "user", "content": prompt},
-        ],
-    )
-    return response.choices[0].message.content
+    return generate_with_openai(client, prompt)
 
 
 @observe
 def answer_query_from_context(client: OpenAI, context: str, query: str) -> str:
-    prompt = f"""
-    Consider the following query, related to a movie: {query}
-    The following movies were proposed as relevant to the query:
-    {context}
-    Provide an answer to the query, choosing the most relevant movie, in a friendly and open tone.
-    """
-    response = client.chat.completions.create(
-        model="gpt-4.1",
-        messages=[
-            {"role": "user", "content": prompt},
-        ],
+    langfuse_context.update_current_observation(
+        input={"query": query, "context": context}
     )
-    return response.choices[0].message.content
+    prompt = f"""
+Consider the following query, related to a movie: {query}
+The following movies were proposed as relevant to the query:
+
+{context}
+
+Provide an answer to the query, choosing the most relevant movie, in a friendly and open tone.
+    """
+    return generate_with_openai(client, prompt)
 
 
 @observe
