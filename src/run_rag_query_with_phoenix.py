@@ -78,6 +78,8 @@ def main():
 
         logging.info("Sending feedback to answer...")
         set_score("user_thumbs", ThumbScore.THUMB_UP)
+        span.set_input(query)
+        span.set_output(answer)
         span.set_status(StatusCode.OK)
 
 
