@@ -24,3 +24,6 @@ uv run --env-file .env src/create_movie_table.py
 uv run --env-file .env src/run_rag_query_with_langfuse.py
 uv run --env-file .env src/run_rag_query_with_phoenix.py
 ```
+
+# Slides
+The slides for the talk are available on [Canva](https://www.canva.com/design/DAGlZuDWVOg/1hqOmbegW5SImGz-SapttQ/view?utm_content=DAGlZuDWVOg&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hcda31658d1).
