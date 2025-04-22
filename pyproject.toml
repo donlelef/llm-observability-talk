@@ -1,0 +1,17 @@
+[project]
+name = "llm-observability-talk"
+version = "0.1.0"
+description = "Code samples for the LLM Observability talk"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "lancedb>=0.21.2",
+    "langfuse>=2.60.3",
+    "numpy>=2.2.5",
+    "openai>=1.75.0",
+    "pandas>=2.2.3",
+    "polars>=1.27.1",
+]
+
+[tool.ruff]
+line-length = 120
