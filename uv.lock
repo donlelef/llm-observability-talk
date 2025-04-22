@@ -282,6 +282,7 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "arize-phoenix-otel" },
+    { name = "httpx" },
     { name = "lancedb" },
     { name = "langfuse" },
     { name = "numpy" },
@@ -294,6 +295,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "arize-phoenix-otel", specifier = ">=0.9.2" },
+    { name = "httpx", specifier = ">=0.28.1" },
     { name = "lancedb", specifier = ">=0.21.2" },
     { name = "langfuse", specifier = ">=2.60.3" },
     { name = "numpy", specifier = ">=2.2.5" },
