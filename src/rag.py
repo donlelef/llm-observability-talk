@@ -1,8 +1,8 @@
 import lancedb
 from openai import OpenAI
 
-from src.embeddings import Movie
-from src.model_interaction import generate_with_openai
+from embeddings import Movie
+from model_interaction import generate_with_openai
 
 
 def build_hyde_query(client: OpenAI, query: str) -> str:

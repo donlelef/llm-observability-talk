@@ -5,10 +5,10 @@ import lancedb
 from langfuse.decorators import observe, langfuse_context
 from langfuse.openai import OpenAI
 
-from src.embeddings import Movie
-from src.paths import LANCEDB_URI
-from src.rag import build_hyde_query, run_reranking, answer_query_from_context, run_semantic_query
-from src.scores import ThumbScore
+from embeddings import Movie
+from paths import LANCEDB_URI
+from rag import build_hyde_query, run_reranking, answer_query_from_context, run_semantic_query
+from scores import ThumbScore
 
 
 @observe

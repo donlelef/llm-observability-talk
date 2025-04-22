@@ -9,10 +9,10 @@ from openinference.instrumentation import using_session, using_user
 from opentelemetry.trace import format_span_id, get_current_span, StatusCode
 from phoenix.otel import register
 
-from src.embeddings import Movie
-from src.paths import LANCEDB_URI
-from src.rag import build_hyde_query, run_semantic_query, run_reranking, answer_query_from_context
-from src.scores import ThumbScore
+from embeddings import Movie
+from paths import LANCEDB_URI
+from rag import build_hyde_query, run_semantic_query, run_reranking, answer_query_from_context
+from scores import ThumbScore
 
 
 def set_score(name: str, score: ThumbScore):
