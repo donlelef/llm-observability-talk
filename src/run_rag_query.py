@@ -34,12 +34,8 @@ You do not need to describe an existing movie, feel free to invent, but stay rel
     return generate_with_openai(client, prompt)
 
 
-def run_semantic_query(
-    db: lancedb.DBConnection, query: str, limit: int = 3
-) -> list[Movie]:
-    res: list[Movie] = (
-        db.open_table("movie").search(query).limit(limit).to_pydantic(Movie)
-    )
+def run_semantic_query(db: lancedb.DBConnection, query: str, limit: int = 3) -> list[Movie]:
+    res: list[Movie] = db.open_table("movie").search(query).limit(limit).to_pydantic(Movie)
     return res
 
 
@@ -58,9 +54,7 @@ def run_reranking(
     movies: list[Movie],
     query: str,
 ) -> str:
-    langfuse_context.update_current_observation(
-        input={"query": query, "movies": movies}
-    )
+    langfuse_context.update_current_observation(input={"query": query, "movies": movies})
     formated_movies = format_movies(movies)
     prompt = f"""
 Consider the following query, related to a movie: {query}
@@ -74,9 +68,7 @@ Only return the updated list, with all the information for each movie.
 
 @observe
 def answer_query_from_context(client: OpenAI, context: str, query: str) -> str:
-    langfuse_context.update_current_observation(
-        input={"query": query, "context": context}
-    )
+    langfuse_context.update_current_observation(input={"query": query, "context": context})
     prompt = f"""
 Consider the following query, related to a movie: {query}
 The following movies were proposed as relevant to the query:
@@ -97,7 +89,8 @@ def main():
     client = OpenAI()
     query = "I would like to watch a movie with dragons"
     session_id = uuid.uuid4().hex
-    langfuse_context.update_current_trace(session_id=session_id)
+    user_id = "AnonimizedLele"
+    langfuse_context.update_current_trace(session_id=session_id, user_id=user_id)
     logging.info(f"Session ID: {session_id}")
 
     logging.info(f"Query: {query}")
@@ -110,9 +103,7 @@ def main():
     logging.info("Running queries...")
     res: list[Movie] = run_semantic_query(db, query)
     hyde_res: list[Movie] = run_semantic_query(db, hyde_query)
-    logging.info(
-        f"Length for original query {len(res)}, length of hyde query: {len(hyde_res)}"
-    )
+    logging.info(f"Length for original query {len(res)}, length of hyde query: {len(hyde_res)}")
 
     logging.info("Re-ranking results...")
     reranked_movies = run_reranking(client, res + hyde_res, query)
@@ -121,6 +112,8 @@ def main():
     logging.info("Answering query...")
     answer = answer_query_from_context(client, reranked_movies, query)
     logging.info(f"Answer: {answer}")
+
+    langfuse_context.score_current_trace(name="user_thumbs", value="THUMBS_UP", data_type="CATEGORICAL")
 
 
 if __name__ == "__main__":
