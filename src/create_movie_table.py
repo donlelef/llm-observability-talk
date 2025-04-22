@@ -3,8 +3,8 @@ import logging
 import lancedb
 import polars as pl
 
-from src.embeddings import Movie
-from src.paths import DATA_PATH, LANCEDB_URI
+from embeddings import Movie
+from paths import DATA_PATH, LANCEDB_URI
 
 
 def main():
@@ -27,11 +27,7 @@ def main():
         table.add(df[i : i + batch_size], mode="append")
 
     logging.info("Running query...")
-    res: Movie = (
-        table.search("I would like a movie with dragons.")
-        .limit(1)
-        .to_pydantic(Movie)[0]
-    )
+    res: Movie = table.search("I would like a movie with dragons.").limit(1).to_pydantic(Movie)[0]
     logging.info(f"Query results: \n Title: {res.title} \n Overview: {res.overview}")
 
 

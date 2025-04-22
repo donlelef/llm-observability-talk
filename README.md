@@ -1,2 +1,26 @@
-# llm-observability-talk
-Code snippets for the talk "Observability for the GenAI Era"
+# Observability for the GenAI Era
+
+Code snippets for the talk "Observability for the GenAI Era", first held at PyCon & PyData DE 2025.
+
+# Getting Started
+
+Make sure your have [uv](https://docs.astral.sh/uv/) installed.
+Then, install the dependencies:
+
+```bash
+uv sync
+```
+
+Next, copy the `.env.example` file to `.env` and fill in the required values:
+
+```bash
+cp .env.example .env
+```
+
+Finally, you can run the scripts:
+
+```bash
+uv run --env-file .env src/create_movie_table.py
+uv run --env-file .env src/run_rag_query_with_langfuse.py
+uv run --env-file .env src/run_rag_query_with_phoenix.py
+```
