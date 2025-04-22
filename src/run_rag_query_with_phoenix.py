@@ -12,9 +12,10 @@ from phoenix.otel import register
 from src.embeddings import Movie
 from src.paths import LANCEDB_URI
 from src.rag import build_hyde_query, run_semantic_query, run_reranking, answer_query_from_context
+from src.scores import ThumbScore
 
 
-def set_score(name: str, label: str, score: int):
+def set_score(name: str, score: ThumbScore):
     httpx.post(
         f"{os.getenv('PHOENIX_COLLECTOR_ENDPOINT')}/v1/span_annotations?sync=false",
         json={
@@ -23,7 +24,7 @@ def set_score(name: str, label: str, score: int):
                     "span_id": format_span_id(get_current_span().get_span_context().span_id),
                     "name": name,
                     "annotator_kind": "HUMAN",
-                    "result": {"label": label, "score": score},
+                    "result": {"label": score.name, "score": score.value},
                     "metadata": {},
                 }
             ]
@@ -76,7 +77,7 @@ def main():
         logging.info(f"Answer: {answer}")
 
         logging.info("Sending feedback to answer...")
-        set_score("user_thumbs", "THUMB_UP", 1)
+        set_score("user_thumbs", ThumbScore.THUMB_UP)
         span.set_status(StatusCode.OK)
 
 
