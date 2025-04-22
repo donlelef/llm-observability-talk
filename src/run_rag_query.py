@@ -113,7 +113,9 @@ def main():
     answer = answer_query_from_context(client, reranked_movies, query)
     logging.info(f"Answer: {answer}")
 
-    langfuse_context.score_current_trace(name="user_thumbs", value="THUMBS_UP", data_type="CATEGORICAL")
+    langfuse_context.score_current_trace(
+        name="user_thumbs", value="THUMB_UP", data_type="CATEGORICAL", config_id="cm9sxq8hj00ubad07sz0sffdp"
+    )
 
 
 if __name__ == "__main__":
