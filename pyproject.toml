@@ -5,6 +5,7 @@ description = "Code samples for the LLM Observability talk"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "arize-phoenix>=10.2.1",
     "arize-phoenix-otel>=0.10.1",
     "httpx>=0.28.1",
     "lancedb>=0.22.1",
