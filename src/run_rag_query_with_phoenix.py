@@ -39,7 +39,7 @@ def main():
         level=logging.INFO,
     )
 
-    logging.info("Registering Phoenix as OTEL proveder...")
+    logging.info("Registering Phoenix as OTEL provider...")
     tracer_provider = register(batch=True, auto_instrument=True, set_global_tracer_provider=False)
     tracer = tracer_provider.get_tracer(__name__)
     logging.info("Registration completed.")

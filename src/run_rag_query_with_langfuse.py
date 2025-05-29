@@ -66,13 +66,15 @@ def main():
     answer = observed_answer_query_from_context(client, reranked_movies, query)
     logging.info(f"Answer: {answer}")
 
+    logging.info("Scoring the trace...")
     langfuse_context.score_current_trace(
         name="user_thumbs",
         value=ThumbScore.THUMB_UP.name,
         data_type="CATEGORICAL",
-        config_id="cm9sxq8hj00ubad07sz0sffdp",
+        config_id="cmb93j9vb00i5ad07imca30fl",
     )
     langfuse_context.update_current_trace(input=query, output=answer)
+    logging.info("Trace scored and updated.")
 
 
 if __name__ == "__main__":
